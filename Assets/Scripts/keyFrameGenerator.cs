@@ -163,6 +163,12 @@ public void keyFramePositionUpdate(Vector3 position, string keyFrameID){
     lineDrawer(); 
 }
 
+/*public void keyFrameSniper(string keyFrameID){
+    string numberStr = keyFrameID.Replace("Keyframe ", "");
+    int keyFrameNumber = int.Parse(numberStr);
+    keyFrameList.RemoveAt(keyFrameNumber);
+}
+*/
     // Update is called once per frame
     void Update()
     {
