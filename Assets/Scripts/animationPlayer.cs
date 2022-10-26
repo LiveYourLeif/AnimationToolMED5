@@ -67,4 +67,3 @@ public class animationPlayer : MonoBehaviour
         isLooping = !isLooping;
     }
 }
-//hey virker det her push??
