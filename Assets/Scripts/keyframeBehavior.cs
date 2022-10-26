@@ -28,7 +28,7 @@ public class keyframeBehavior : MonoBehaviour
             else
             { */
             animatedObject.GetComponent<keyFrameGenerator>().keyFramePositionUpdate(this.transform.position, gameObject.name);
-            }
+            //}
         }
     }
 }
