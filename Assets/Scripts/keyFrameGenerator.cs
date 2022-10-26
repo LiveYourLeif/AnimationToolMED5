@@ -159,6 +159,8 @@ public void keyFramePositionUpdate(Vector3 position, string keyFrameID){
     string numberStr = keyFrameID.Replace("Keyframe ", "");
     int keyFrameNumber = int.Parse(numberStr);
     keyFrameList[keyFrameNumber] = position;
+    keyFrameList[keyFrameNumber-1] = position *0.5f;
+    keyFrameList[keyFrameNumber+1] = position *0.5f;
     lineDrawer(); 
 }
 
