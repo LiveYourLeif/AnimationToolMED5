@@ -44,6 +44,23 @@ public class keyFrameGenerator : MonoBehaviour
 
 //keyFrameSpawner, spawns a sphere for each keyfram. 
 public GameObject keyFrameSpawner (){  
+    GameObject sphere = sphereSpawn();
+    sphere.transform.position = rigi.transform.position; //Set its position to the player
+    keyFrameList.Add(sphere.transform.position); 
+    keyFrameRotations.Add(rigi.transform.rotation);
+    /*string result = "List contents: ";
+    foreach (var keyframe in keyFrameRotations) //Printer coordinates pÃ¥ alle punkterne
+        {
+             result += keyframe.ToString() + ", ";
+        }
+    Debug.Log(result);   */
+    counter ++;
+    return sphere;
+                
+ }
+
+
+public GameObject sphereSpawn (){
     GetComponent<Renderer>().material.color = keyFrameColor; //Change its color  
     GetComponent<SphereCollider>().isTrigger = true;     //Delete its collider
     //transform.localScale = new Vector3(0.5f,0.5f,0.5f);  //Scale the sphere down by 50%                    
@@ -60,20 +77,8 @@ public GameObject keyFrameSpawner (){
     sphere.tag = "Keyframe";
     sphere.transform.localScale = new Vector3(0.1f,0.1f,0.1f);  //Scale the sphere down by 50%
     sphere.name = ($"Keyframe {counter}");      //Change its name to keyframe, plus a counter
-    sphere.transform.position = rigi.transform.position; //Set its position to the player
-    keyFrameList.Add(sphere.transform.position); 
-    keyFrameRotations.Add(rigi.transform.rotation);
-    /*string result = "List contents: ";
-    foreach (var keyframe in keyFrameRotations) //Printer coordinates pÃ¥ alle punkterne
-        {
-             result += keyframe.ToString() + ", ";
-        }
-    Debug.Log(result);   */
-    counter ++;
     return sphere;
-                
- }
-
+}
 
 void lineDrawer () {
     if (keyFrameList.Count > 1){
@@ -129,6 +134,25 @@ public void toggleVisibility(){
 
 public void animToggleVoid(){
     animToggle = !animToggle;
+}
+
+public void addKeyFrameLast(){
+    if(keyFrameList.Count > 1){
+        GameObject sphere = sphereSpawn();
+        int lastPos = keyFrameList.Count - 1;
+        Vector3 spawnPos = keyFrameList[lastPos] + (keyFrameList[lastPos] - keyFrameList[lastPos - 1]);
+        sphere.transform.position = spawnPos; //Set its position to the player
+        keyFrameList.Add(sphere.transform.position); 
+        keyFrameRotations.Add(rigi.transform.rotation);
+        /*string result = "List contents: ";
+        foreach (var keyframe in keyFrameRotations) //Printer coordinates pÃ¥ alle punkterne
+            {
+                result += keyframe.ToString() + ", ";
+            }
+        Debug.Log(result);   */
+        counter ++;
+        lineDrawer(); 
+    }
 }
 
 public void keyFramePositionUpdate(Vector3 position, string keyFrameID){
