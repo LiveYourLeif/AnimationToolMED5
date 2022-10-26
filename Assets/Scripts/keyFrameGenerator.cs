@@ -137,7 +137,7 @@ public void animToggleVoid(){
     animToggle = !animToggle;
 }
 
-public void addKeyFrameLast(){
+public void addKeyFrame(){
     if(keyFrameList.Count > 1){
         GameObject sphere = sphereSpawn();
         int lastPos = keyFrameList.Count - 1;
