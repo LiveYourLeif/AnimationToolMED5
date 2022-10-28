@@ -95,18 +95,25 @@ void lineDrawer () {
 public void resetAnim(){
 
    GameObject[] k = GameObject.FindGameObjectsWithTag ("Keyframe");
-     
+    
+    lineRenderer.startColor = new Color(0f,255f,0f,0f);
+    lineRenderer.endColor = new Color(0f,255f,0f,0f);
+    
     for(var i = 0 ; i < k.Length ; i ++)
     {
         Destroy(k[i]);
     }
     keyFrameList.Clear();
-    //lineRenderer.startColor = new Color(0f,255f,0f,0f);
-    //lineRenderer.endColor = new Color(0f,255f,0f,0f);
+    counter = 0;
 }
 
 public void toggleVisibility(){
-    if (toggleVis == true){
+    toggleVis = !toggleVis;
+    changeVisibility();
+}
+
+void changeVisibility(){
+    if (toggleVis == false){
         GameObject[] k = GameObject.FindGameObjectsWithTag ("Keyframe");
         
         for(var i = 0 ; i < k.Length ; i ++)
@@ -116,7 +123,6 @@ public void toggleVisibility(){
 
         lineRenderer.startColor = new Color(0f,255f,0f,0f);
         lineRenderer.endColor = new Color(0f,255f,0f,0f);
-        toggleVis = false;
     }
     else 
     {
@@ -129,7 +135,6 @@ public void toggleVisibility(){
 
         lineRenderer.startColor = new Color(0f,255f,0f,0.4f);
         lineRenderer.endColor = new Color(0f,255f,0f,0.4f);
-        toggleVis = true;
     }
 }
 

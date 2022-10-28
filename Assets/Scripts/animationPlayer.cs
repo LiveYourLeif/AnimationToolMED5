@@ -12,6 +12,7 @@ public class animationPlayer : MonoBehaviour
     public float animSpeed {get; set;}
     public bool rotationTrack = false;
     public bool isLooping = true;
+    public bool pause = false;
 
     // Start is called before the first frame update
     void Start(){
@@ -22,21 +23,27 @@ public class animationPlayer : MonoBehaviour
 
     void Update()
     {
-        if(XRCustom.isGrabbed == false && keyFG.keyFrameList.Count > 1){
-            if(firstTime == true){
-                gameObject.transform.position = keyFG.keyFrameList[0];
-                if (rotationTrack){
-                gameObject.transform.rotation = keyFG.keyFrameRotations[0];
+        if(XRCustom.isGrabbed)
+        {
+            nextFrame = 0;
+        }
+        if(pause == false){
+            if(XRCustom.isGrabbed == false && keyFG.keyFrameList.Count > 1){
+                if(firstTime == true){
+                    gameObject.transform.position = keyFG.keyFrameList[0];
+                    if (rotationTrack){
+                    gameObject.transform.rotation = keyFG.keyFrameRotations[0];
+                    }
+                    firstTime = false;
                 }
-                firstTime = false;
+                playAnimation(keyFG.keyFrameList, keyFG.keyFrameRotations);
             }
-            playAnimation(keyFG.keyFrameList, keyFG.keyFrameRotations);
         }
     }
     
 
     void playAnimation(List <Vector3> frames, List <Quaternion> rotations){
-
+    Debug.Log("Next frame is: " + nextFrame);
     gameObject.transform.position = Vector3.MoveTowards(transform.position, frames[nextFrame], Time.deltaTime * animSpeed);
     if(rotationTrack){
     gameObject.transform.rotation = Quaternion.RotateTowards(transform.rotation, rotations[nextFrame], Time.deltaTime * animSpeed * 100);
@@ -66,5 +73,9 @@ public class animationPlayer : MonoBehaviour
     public void loopingToggle(){
         isLooping = !isLooping;
     }
+
+    public void pauseToggleVoid(){
+    pause = !pause;
+}
 }
 //hey virker det her push??
