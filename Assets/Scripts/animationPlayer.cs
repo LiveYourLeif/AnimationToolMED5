@@ -7,6 +7,8 @@ public class animationPlayer : MonoBehaviour
 
     public keyFrameGenerator keyFG;
     public XRCustomGrabInteractable XRCustom;
+    public GameObject manager;
+    public gameManager mng;
     private int nextFrame = 1;
     private bool firstTime = true;
     public float animSpeed {get; set;}
@@ -19,6 +21,8 @@ public class animationPlayer : MonoBehaviour
         XRCustom = gameObject.GetComponent<XRCustomGrabInteractable>();
         keyFG = gameObject.GetComponent<keyFrameGenerator>();
         animSpeed = 5f;
+        manager = GameObject.Find("GameManager");
+        mng = manager.GetComponent<gameManager>();
     }
 
     void Update()
@@ -26,6 +30,10 @@ public class animationPlayer : MonoBehaviour
         if(XRCustom.isGrabbed)
         {
             nextFrame = 0;
+        }
+        if(mng.sniperMode){
+            gameObject.transform.position = keyFG.keyFrameList[0];
+            nextFrame = 1;
         }
         if(pause == false){
             if(XRCustom.isGrabbed == false && keyFG.keyFrameList.Count > 1){
@@ -43,7 +51,6 @@ public class animationPlayer : MonoBehaviour
     
 
     void playAnimation(List <Vector3> frames, List <Quaternion> rotations){
-    Debug.Log("Next frame is: " + nextFrame);
     gameObject.transform.position = Vector3.MoveTowards(transform.position, frames[nextFrame], Time.deltaTime * animSpeed);
     if(rotationTrack){
     gameObject.transform.rotation = Quaternion.RotateTowards(transform.rotation, rotations[nextFrame], Time.deltaTime * animSpeed * 100);

@@ -14,6 +14,8 @@ public class keyFrameGenerator : MonoBehaviour
     public Color keyFrameColor; //Decalres color object which controls the color of the keyframes
     LineRenderer lineRenderer;
     public XRCustomGrabInteractable xrCustom;
+    public GameObject manager;
+    public gameManager mng;
     public float keyFrameSpacing {get; set;}
     public bool toggleVis = true;
     public bool animToggle = true;
@@ -26,6 +28,8 @@ public class keyFrameGenerator : MonoBehaviour
     void Start()
     {
         xrCustom = gameObject.GetComponent<XRCustomGrabInteractable>();
+        manager = GameObject.Find("GameManager");
+        mng = manager.GetComponent<gameManager>();
         rigi = GetComponent<Rigidbody>();
         keyFrameList = new List<Vector3>();
         keyFramePosition = new Vector3(0,0,0); 
@@ -168,16 +172,24 @@ public void keyFramePositionUpdate(Vector3 position, string keyFrameID){
     lineDrawer(); 
 }
 
-/*public void keyFrameSniper(string keyFrameID){
+public void keyFrameSniper(string keyFrameID){
+    GameObject[] k = GameObject.FindGameObjectsWithTag ("Keyframe");
     string numberStr = keyFrameID.Replace("Keyframe ", "");
     int keyFrameNumber = int.Parse(numberStr);
     keyFrameList.RemoveAt(keyFrameNumber);
+        
+        for(var i = 0 ; i < k.Length ; i ++)
+        {
+            k[i].name = ($"Keyframe {i}");  
+        }
+    Debug.Log($"List length: " + keyFrameList.Count);
+    lineDrawer();
 }
-*/
+
     // Update is called once per frame
     void Update()
     {
-        if(xrCustom.isGrabbed == true && animToggle == true){
+        if(xrCustom.isGrabbed == true && animToggle == true && mng.sniperMode == false){
             float dist = Vector3.Distance(transform.position, keyFramePosition);    //Calculate the distance between the player and the last sphere
             if (dist > keyFrameSpacing){
                 keyFramePosition = rigi.transform.position;
