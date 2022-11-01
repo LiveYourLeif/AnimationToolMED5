@@ -25,6 +25,7 @@ public class keyframeBehavior : MonoBehaviour
         {
             if(mng.sniperMode == true)
             {
+                gameObject.SetActive(false);
                 Destroy(gameObject);
                 animatedObject.GetComponent<keyFrameGenerator>().keyFrameSniper(gameObject.name);
             } else

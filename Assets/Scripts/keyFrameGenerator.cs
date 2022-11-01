@@ -177,12 +177,13 @@ public void keyFrameSniper(string keyFrameID){
     string numberStr = keyFrameID.Replace("Keyframe ", "");
     int keyFrameNumber = int.Parse(numberStr);
     keyFrameList.RemoveAt(keyFrameNumber);
+    counter--;
         
         for(var i = 0 ; i < k.Length ; i ++)
         {
             k[i].name = ($"Keyframe {i}");  
+            Debug.Log(k[i].name);
         }
-    Debug.Log($"List length: " + keyFrameList.Count);
     lineDrawer();
 }
 
