@@ -11,8 +11,7 @@ public class animationPlayer : MonoBehaviour
     public gameManager mng;
     private int nextFrame = 1;
     private bool firstTime = true;
-    public float animSpeed {get; set;}
-    public bool rotationTrack = false;
+    public float animSpeed;
     public bool isLooping = true;
     public bool pause = false;
 
@@ -20,13 +19,13 @@ public class animationPlayer : MonoBehaviour
     void Start(){
         XRCustom = gameObject.GetComponent<XRCustomGrabInteractable>();
         keyFG = gameObject.GetComponent<keyFrameGenerator>();
-        animSpeed = 5f;
         manager = GameObject.Find("GameManager");
         mng = manager.GetComponent<gameManager>();
     }
 
     void Update()
     {
+        animSpeed = mng.animationSpeed;
         if(XRCustom.isGrabbed)
         {
             nextFrame = 0;
@@ -39,30 +38,31 @@ public class animationPlayer : MonoBehaviour
             if(XRCustom.isGrabbed == false && keyFG.keyFrameList.Count > 1){
                 if(firstTime == true){
                     gameObject.transform.position = keyFG.keyFrameList[0];
-                    if (rotationTrack){
-                    gameObject.transform.rotation = keyFG.keyFrameRotations[0];
-                    }
+                    //if (rotationTrack){
+                    //gameObject.transform.rotation = keyFG.keyFrameRotations[0];
+                    //}
                     firstTime = false;
                 }
                 playAnimation(keyFG.keyFrameList, keyFG.keyFrameRotations);
             }
         }
+        Debug.Log($"Animation speed: " + animSpeed);
     }
     
 
     void playAnimation(List <Vector3> frames, List <Quaternion> rotations){
     gameObject.transform.position = Vector3.MoveTowards(transform.position, frames[nextFrame], Time.deltaTime * animSpeed);
-    if(rotationTrack){
-    gameObject.transform.rotation = Quaternion.RotateTowards(transform.rotation, rotations[nextFrame], Time.deltaTime * animSpeed * 100);
-    }
+    //if(rotationTrack){
+    //gameObject.transform.rotation = Quaternion.RotateTowards(transform.rotation, rotations[nextFrame], Time.deltaTime * animSpeed * 100);
+    //}
 
     if(gameObject.transform.position == frames[nextFrame]){
         if(nextFrame + 1 >= frames.Count){
             if(isLooping == true){
             gameObject.transform.position = frames[0];
-                if(rotationTrack){
-                gameObject.transform.rotation = rotations[0];
-                }
+                //if(rotationTrack){
+                //gameObject.transform.rotation = rotations[0];
+                //}
                 nextFrame = 1;
             }
         }
@@ -73,16 +73,12 @@ public class animationPlayer : MonoBehaviour
     //Debug.Log(gameObject.transform.position);
     }
 
-    public void rotationToggleVoid(){
-        rotationTrack = !rotationTrack;
-    }
-
     public void loopingToggle(){
         isLooping = !isLooping;
     }
 
     public void pauseToggleVoid(){
     pause = !pause;
-}
+    }
 }
 //hey virker det her push??

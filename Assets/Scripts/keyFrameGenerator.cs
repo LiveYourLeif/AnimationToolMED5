@@ -16,9 +16,9 @@ public class keyFrameGenerator : MonoBehaviour
     public XRCustomGrabInteractable xrCustom;
     public GameObject manager;
     public gameManager mng;
-    public float keyFrameSpacing {get; set;}
     public bool toggleVis = true;
     public bool animToggle = true;
+    public float keyFrameSpacing;
 
     
     
@@ -39,7 +39,6 @@ public class keyFrameGenerator : MonoBehaviour
         lineRenderer.material = new Material(Shader.Find("Sprites/Default"));
         lineRenderer.startColor = new Color(0f,255f,0f,0.0f);
         lineRenderer.endColor = new Color(0f,255f,0f,0.0f);
-        keyFrameSpacing = 0.5f;
       
         
         
@@ -190,6 +189,7 @@ public void keyFrameSniper(string keyFrameID){
     // Update is called once per frame
     void Update()
     {
+        keyFrameSpacing = mng.KFSpacing;
         if(xrCustom.isGrabbed == true && animToggle == true && mng.sniperMode == false){
             float dist = Vector3.Distance(transform.position, keyFramePosition);    //Calculate the distance between the player and the last sphere
             if (dist > keyFrameSpacing){
