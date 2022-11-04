@@ -6,14 +6,15 @@ using UnityEngine.XR.Interaction.Toolkit;
 public class keyframeBehavior : MonoBehaviour
 {
     public XRCustomGrabInteractable xrCustomGrab;
-    public GameObject animatedObject;
     public GameObject manager;
+    public GameObject[] animatedObjects;
+    public GameObject activeObj;
     public gameManager mng;
     public bool sniperMode = false;
 
     void Start()
     {
-        animatedObject = GameObject.Find("Cube");
+        activeObj = GameObject.FindWithTag("Animatable");
         manager = GameObject.Find("GameManager");
         xrCustomGrab = gameObject.GetComponent<XRCustomGrabInteractable>();
         mng = manager.GetComponent<gameManager>();
@@ -23,14 +24,14 @@ public class keyframeBehavior : MonoBehaviour
     {
         if(xrCustomGrab.isGrabbed == true)
         {
-            if(mng.sniperMode == true)
+            if(mng.sniperMode == true && activeObj.GetComponent<keyFrameGenerator>().keyFrameList.Count > 2)
             {
                 gameObject.SetActive(false);
                 Destroy(gameObject);
-                animatedObject.GetComponent<keyFrameGenerator>().keyFrameSniper(gameObject.name);
+                activeObj.GetComponent<keyFrameGenerator>().keyFrameSniper(gameObject.name);
             } else
             { 
-                animatedObject.GetComponent<keyFrameGenerator>().keyFramePositionUpdate(this.transform.position, gameObject.name);
+                activeObj.GetComponent<keyFrameGenerator>().keyFramePositionUpdate(this.transform.position, gameObject.name);
             }
         }
     }

@@ -1165,7 +1165,7 @@ GameObject:
   - component: {fileID: 371851302}
   - component: {fileID: 371851303}
   m_Layer: 0
-  m_Name: White Cubes
+  m_Name: White Cube
   m_TagString: Animatable
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -1710,7 +1710,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_LineWidth: 0.01
   m_OverrideInteractorLineLength: 1
-  m_LineLength: 10
+  m_LineLength: 20
   m_WidthCurve:
     serializedVersion: 2
     m_Curve:
@@ -2625,7 +2625,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_LineWidth: 0.01
   m_OverrideInteractorLineLength: 1
-  m_LineLength: 5
+  m_LineLength: 20
   m_WidthCurve:
     serializedVersion: 2
     m_Curve:
@@ -3618,7 +3618,6 @@ MonoBehaviour:
   sniperMode: 0
   animPlayer: {fileID: 0}
   keyFG: {fileID: 0}
-  dropMenu: {fileID: 917710651}
 --- !u!1 &785006234
 GameObject:
   m_ObjectHideFlags: 0
