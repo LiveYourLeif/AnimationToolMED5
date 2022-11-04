@@ -46,7 +46,6 @@ public class animationPlayer : MonoBehaviour
                 playAnimation(keyFG.keyFrameList, keyFG.keyFrameRotations);
             }
         }
-        Debug.Log($"Animation speed: " + animSpeed);
     }
     
 

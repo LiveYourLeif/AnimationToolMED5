@@ -19,9 +19,7 @@ public class keyFrameGenerator : MonoBehaviour
     public bool toggleVis = true;
     public bool animToggle = true;
     public float keyFrameSpacing;
-
-    
-    
+    public bool isActive = false;
 
 
     // Start is called before the first frame update
@@ -38,11 +36,7 @@ public class keyFrameGenerator : MonoBehaviour
         lineRenderer = this.gameObject.AddComponent<LineRenderer>(); //spawner en thick line i 0,0,0.. fix det
         lineRenderer.material = new Material(Shader.Find("Sprites/Default"));
         lineRenderer.startColor = new Color(0f,255f,0f,0.0f);
-        lineRenderer.endColor = new Color(0f,255f,0f,0.0f);
-      
-        
-        
-               
+        lineRenderer.endColor = new Color(0f,255f,0f,0.0f);       
     }
 
 
@@ -80,7 +74,7 @@ public GameObject sphereSpawn (){
     sphereGrab.trackRotation = false;
     sphere.tag = "Keyframe";
     sphere.transform.localScale = new Vector3(0.1f,0.1f,0.1f);  //Scale the sphere down by 50%
-    sphere.name = ($"Keyframe {counter}");      //Change its name to keyframe, plus a counter
+    sphere.name = ($"{this.gameObject.name} Keyframe {counter}");      //Change its name to keyframe, plus a counter
     return sphere;
 }
 
@@ -165,7 +159,8 @@ public void addKeyFrame(){
 }
 
 public void keyFramePositionUpdate(Vector3 position, string keyFrameID){
-    string numberStr = keyFrameID.Replace("Keyframe ", "");
+    string numberStr = keyFrameID.Replace($"{this.gameObject.name} Keyframe ", "");
+    Debug.Log(numberStr);
     int keyFrameNumber = int.Parse(numberStr);
     keyFrameList[keyFrameNumber] = position;
     lineDrawer(); 
@@ -173,7 +168,7 @@ public void keyFramePositionUpdate(Vector3 position, string keyFrameID){
 
 public void keyFrameSniper(string keyFrameID){
     GameObject[] k = GameObject.FindGameObjectsWithTag ("Keyframe");
-    string numberStr = keyFrameID.Replace("Keyframe ", "");
+    string numberStr = keyFrameID.Replace($"{this.gameObject.name} Keyframe ", "");
     int keyFrameNumber = int.Parse(numberStr);
     keyFrameList.RemoveAt(keyFrameNumber);
     counter--;
@@ -190,13 +185,17 @@ public void keyFrameSniper(string keyFrameID){
     void Update()
     {
         keyFrameSpacing = mng.KFSpacing;
-        if(xrCustom.isGrabbed == true && animToggle == true && mng.sniperMode == false){
+        if(xrCustom.isGrabbed == true && animToggle == true && mng.sniperMode == false && isActive == true){
             float dist = Vector3.Distance(transform.position, keyFramePosition);    //Calculate the distance between the player and the last sphere
             if (dist > keyFrameSpacing){
                 keyFramePosition = rigi.transform.position;
                 keyFrameSpawner();    
                 lineDrawer();  
             }
+        }
+
+        if(xrCustom.isGrabbed && isActive == false){
+            mng.changeActive(this.gameObject);
         }
     }
 }
