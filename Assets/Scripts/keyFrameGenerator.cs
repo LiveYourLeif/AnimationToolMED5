@@ -98,7 +98,9 @@ public void resetAnim(){
     
     for(var i = 0 ; i < k.Length ; i ++)
     {
-        Destroy(k[i]);
+        if(k[i].name.Contains(gameObject.name)){
+            Destroy(k[i]);
+        }
     }
     keyFrameList.Clear();
     counter = 0;
