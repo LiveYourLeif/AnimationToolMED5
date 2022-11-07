@@ -169,16 +169,23 @@ public void keyFramePositionUpdate(Vector3 position, string keyFrameID){
 }
 
 public void keyFrameSniper(string keyFrameID){
-    GameObject[] k = GameObject.FindGameObjectsWithTag ("Keyframe");
+    GameObject[] k = GameObject.FindGameObjectsWithTag("Keyframe");
+    List<Object> kfSeperatedList = new List<Object>();
+
     string numberStr = keyFrameID.Replace($"{this.gameObject.name} Keyframe ", "");
     int keyFrameNumber = int.Parse(numberStr);
     keyFrameList.RemoveAt(keyFrameNumber);
     counter--;
-        
-        for(var i = 0 ; i < k.Length ; i ++)
+
+    for (var i = 0; i < k.Length; i++){
+                if(k[i].name.Contains(this.gameObject.name)){
+                    kfSeperatedList.Add(k[i]);
+                }
+             }
+
+    for(var i = 0 ; i < kfSeperatedList.Count ; i++)
         {
-            k[i].name = ($"Keyframe {i}");  
-            Debug.Log(k[i].name);
+            kfSeperatedList[i].name = ($"{this.gameObject.name} Keyframe {i}");  
         }
     lineDrawer();
 }

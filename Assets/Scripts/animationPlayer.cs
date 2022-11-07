@@ -31,8 +31,10 @@ public class animationPlayer : MonoBehaviour
             nextFrame = 0;
         }
         if(mng.sniperMode){
-            gameObject.transform.position = keyFG.keyFrameList[0];
-            nextFrame = 1;
+            if(keyFG.keyFrameList.Count > 1){
+                gameObject.transform.position = keyFG.keyFrameList[0];
+                nextFrame = 1;
+            }
         }
         if(pause == false){
             if(XRCustom.isGrabbed == false && keyFG.keyFrameList.Count > 1){

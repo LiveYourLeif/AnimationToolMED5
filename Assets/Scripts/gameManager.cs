@@ -13,6 +13,7 @@ public class gameManager : MonoBehaviour
     public GameObject activeAnimatable;
     public TextMeshProUGUI objText;
     GameObject[] animatables;
+    GameObject[] keyFrames;
     public animationPlayer animPlayer;
     public keyFrameGenerator keyFG;
     public float animationSpeed {get; set;}
@@ -69,18 +70,32 @@ public class gameManager : MonoBehaviour
                 animPlayer = anims.GetComponent<animationPlayer>();
                 keyFG.isActive = true;
                 objText.text = $"SELECTED:\n" + anims.name;
+                anims.GetComponent<Renderer>().material.color = new Color(255f, 0f, 0f);
             }
             else
             {
                 keyFG = anims.GetComponent<keyFrameGenerator>();
                 animPlayer = anims.GetComponent<animationPlayer>();
                 keyFG.isActive = false;
+                anims.GetComponent<Renderer>().material.color = Color.grey;
             }
         }
             keyFG = newActive.GetComponent<keyFrameGenerator>();
             animPlayer = newActive.GetComponent<animationPlayer>();
-    }
-    
+
+            keyFrames = GameObject.FindGameObjectsWithTag("Keyframe");
+            
+            for (var i = 0; i < keyFrames.Length; i++){
+                if(keyFrames[i].name.Contains(newActive.name))
+                    {
+                        keyFrames[i].GetComponent<Renderer>().material.color = new Color(255f, 0f, 0f);
+                    }
+                    else 
+                    {
+                        keyFrames[i].GetComponent<Renderer>().material.color = Color.grey;
+                    }
+                }
+             }
     void Update(){
     }
 }
