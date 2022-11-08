@@ -26,7 +26,7 @@ public class animationPlayer : MonoBehaviour
     void Update()
     {
         animSpeed = mng.animationSpeed;
-        if(XRCustom.isGrabbed)
+        if(XRCustom.isGrabbed && pause == false)
         {
             nextFrame = 0;
         }

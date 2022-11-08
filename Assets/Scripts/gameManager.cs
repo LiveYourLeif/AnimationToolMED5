@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 using UnityEngine.XR.Interaction.Toolkit;
 using TMPro;
 
@@ -18,6 +19,10 @@ public class gameManager : MonoBehaviour
     public keyFrameGenerator keyFG;
     public float animationSpeed {get; set;}
     public float KFSpacing {get; set;}
+
+    public GameObject inGameAnimToggle;
+    public GameObject inGameVisToggle;
+    public GameObject inGameLoopToggle;
     
     void Start(){
         animatables = GameObject.FindGameObjectsWithTag ("Animatable");
@@ -60,6 +65,10 @@ public class gameManager : MonoBehaviour
         keyFG.addKeyFrame();
     }
 
+    public void pauseAnimation(){
+        animPlayer.pauseToggleVoid();
+    }
+
     public void changeActive(GameObject newActive){
         foreach(GameObject anims in animatables)
         {
@@ -95,7 +104,8 @@ public class gameManager : MonoBehaviour
                         keyFrames[i].GetComponent<Renderer>().material.color = Color.grey;
                     }
                 }
-             }
+    }
+             
     void Update(){
     }
 }
