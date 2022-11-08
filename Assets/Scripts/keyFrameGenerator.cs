@@ -80,10 +80,10 @@ public GameObject sphereSpawn (){
 
 void lineDrawer () {
     if (keyFrameList.Count > 1){
-    lineRenderer.startColor = new Color(0f,255f,0f,0.4f);
-    lineRenderer.endColor = new Color(0f,255f,0f,0.4f);
-    lineRenderer.startWidth = 0.01f;
-    lineRenderer.endWidth = 0.01f;
+    lineRenderer.startColor = new Color(255f,255f,255f,0.4f);
+    lineRenderer.endColor = new Color(255f,255f,255f,0.4f);
+    lineRenderer.startWidth = 0.03f;
+    lineRenderer.endWidth = 0.03f;
     lineRenderer.positionCount = keyFrameList.Count;
     lineRenderer.SetPositions(keyFrameList.ToArray());
     }
@@ -93,8 +93,8 @@ public void resetAnim(){
 
    GameObject[] k = GameObject.FindGameObjectsWithTag ("Keyframe");
     
-    lineRenderer.startColor = new Color(0f,255f,0f,0f);
-    lineRenderer.endColor = new Color(0f,255f,0f,0f);
+    lineRenderer.startColor = new Color(0f,0f,0f,0f);
+    lineRenderer.endColor = new Color(0f,0f,0f,0f);
     
     for(var i = 0 ; i < k.Length ; i ++)
     {
@@ -120,8 +120,8 @@ void changeVisibility(){
             k[i].GetComponent<MeshRenderer>().enabled = false;
         }
 
-        lineRenderer.startColor = new Color(0f,255f,0f,0f);
-        lineRenderer.endColor = new Color(0f,255f,0f,0f);
+        lineRenderer.startColor = new Color(0f,0f,0f,0f);
+        lineRenderer.endColor = new Color(0f,0f,0f,0f);
     }
     else 
     {
@@ -132,8 +132,8 @@ void changeVisibility(){
             k[i].GetComponent<MeshRenderer>().enabled = true;
         }
 
-        lineRenderer.startColor = new Color(0f,255f,0f,0.4f);
-        lineRenderer.endColor = new Color(0f,255f,0f,0.4f);
+        lineRenderer.startColor = new Color(255f,255f,255f,0.4f);
+        lineRenderer.endColor = new Color(255f,255f,255f,0.4f);
     }
 }
 
