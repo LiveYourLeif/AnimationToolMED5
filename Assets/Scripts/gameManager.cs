@@ -69,6 +69,15 @@ public class gameManager : MonoBehaviour
         animPlayer.pauseToggleVoid();
     }
 
+    public void resetAll(){
+        GameObject current = this.gameObject;
+        foreach(GameObject anims in animatables){
+            keyFG = anims.GetComponent<keyFrameGenerator>();
+            keyFG.resetAnim();
+        }
+        keyFG = current.GetComponent<keyFrameGenerator>();
+    }
+
     public void changeActive(GameObject newActive){
         foreach(GameObject anims in animatables)
         {
