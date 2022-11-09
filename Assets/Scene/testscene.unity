@@ -3581,7 +3581,11 @@ MonoBehaviour:
   objText: {fileID: 1977515932}
   animPlayer: {fileID: 0}
   keyFG: {fileID: 0}
-  loopToggle: {fileID: 1189774977}
+  inGameLoopToggle: {fileID: 1189774977}
+  inGameAnimToggle: {fileID: 1136235505}
+  inGameVisibilityToggle: {fileID: 179286341}
+  inGamePauseToggle: {fileID: 875975505}
+  inGameDeleteToggle: {fileID: 488996434}
 --- !u!1 &788983468
 GameObject:
   m_ObjectHideFlags: 0

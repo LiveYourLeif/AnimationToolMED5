@@ -20,7 +20,11 @@ public class gameManager : MonoBehaviour
     public float animationSpeed {get; set;}
     public float KFSpacing {get; set;}
 
-    public Toggle loopToggle;
+    public Toggle inGameLoopToggle;
+    public Toggle inGameAnimToggle;
+    public Toggle inGamePauseToggle;
+
+    
     
     void Start(){
         animatables = GameObject.FindGameObjectsWithTag ("Animatable");
@@ -109,16 +113,36 @@ public class gameManager : MonoBehaviour
                         keyFrames[i].GetComponent<Renderer>().material.color = Color.grey;
                     }
                 }
-
-                if (animPlayer.isLooping == false && loopToggle.isOn == true){
-                    loopToggle.isOn = false;
+                
+                // Looping
+                if (animPlayer.isLooping == false && inGameLoopToggle.isOn == true){
+                    inGameLoopToggle.isOn = false;
                     animPlayer.isLooping = false;
                 } 
-                else if(animPlayer.isLooping == true && loopToggle.isOn == false){
-                    loopToggle.isOn = true;
+                else if(animPlayer.isLooping == true && inGameLoopToggle.isOn == false){
+                    inGameLoopToggle.isOn = true;
                     animPlayer.isLooping = true;
                 }
-                
+
+                // Animate
+                if (keyFG.animToggle == false && inGameAnimToggle.isOn == true){
+                    inGameAnimToggle.isOn = false;
+                    keyFG.animToggle = false;
+                } 
+                else if(keyFG.animToggle == true && inGameAnimToggle.isOn == false){
+                    inGameAnimToggle.isOn = true;
+                    keyFG.animToggle = true;
+                }
+
+                // Pause
+                if (animPlayer.pause == false && inGamePauseToggle.isOn == true){
+                    inGamePauseToggle.isOn= false;
+                    animPlayer.pause = false;
+                } 
+                else if(animPlayer.pause == true && inGamePauseToggle.isOn== false){
+                    inGamePauseToggle.isOn = true;
+                    animPlayer.pause = true;
+                }
     }
              
     void Update(){
