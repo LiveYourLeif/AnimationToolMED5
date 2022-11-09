@@ -8,6 +8,7 @@ public class keyFrameGenerator : MonoBehaviour
     // This is Tobi's Branch!
     public int counter; // Declares varaible that counter the amount of keyframe present in the interface
     public Vector3 keyFramePosition;
+    Vector3 startPos;
     public List <Vector3> keyFrameList;
     public List <Quaternion> keyFrameRotations;
     Rigidbody rigi; 
@@ -36,7 +37,8 @@ public class keyFrameGenerator : MonoBehaviour
         lineRenderer = this.gameObject.AddComponent<LineRenderer>(); //spawner en thick line i 0,0,0.. fix det
         lineRenderer.material = new Material(Shader.Find("Sprites/Default"));
         lineRenderer.startColor = new Color(0f,255f,0f,0.0f);
-        lineRenderer.endColor = new Color(0f,255f,0f,0.0f);       
+        lineRenderer.endColor = new Color(0f,255f,0f,0.0f);   
+        startPos = gameObject.transform.position;    
     }
 
 
@@ -104,6 +106,7 @@ public void resetAnim(){
     }
     keyFrameList.Clear();
     counter = 0;
+    this.transform.position = startPos;
 }
 
 public void toggleVisibility(){

@@ -20,9 +20,7 @@ public class gameManager : MonoBehaviour
     public float animationSpeed {get; set;}
     public float KFSpacing {get; set;}
 
-    public GameObject inGameAnimToggle;
-    public GameObject inGameVisToggle;
-    public GameObject inGameLoopToggle;
+    public Toggle loopToggle;
     
     void Start(){
         animatables = GameObject.FindGameObjectsWithTag ("Animatable");
@@ -70,12 +68,10 @@ public class gameManager : MonoBehaviour
     }
 
     public void resetAll(){
-        GameObject current = this.gameObject;
         foreach(GameObject anims in animatables){
             keyFG = anims.GetComponent<keyFrameGenerator>();
             keyFG.resetAnim();
         }
-        keyFG = current.GetComponent<keyFrameGenerator>();
     }
 
     public void changeActive(GameObject newActive){
@@ -113,6 +109,16 @@ public class gameManager : MonoBehaviour
                         keyFrames[i].GetComponent<Renderer>().material.color = Color.grey;
                     }
                 }
+
+                if (animPlayer.isLooping == false && loopToggle.isOn == true){
+                    loopToggle.isOn = false;
+                    animPlayer.isLooping = false;
+                } 
+                else if(animPlayer.isLooping == true && loopToggle.isOn == false){
+                    loopToggle.isOn = true;
+                    animPlayer.isLooping = true;
+                }
+                
     }
              
     void Update(){
