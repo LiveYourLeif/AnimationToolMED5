@@ -13,6 +13,7 @@ public class gameManager : MonoBehaviour
     public bool sniperMode = false;
     public GameObject activeAnimatable;
     public TextMeshProUGUI objText;
+    public TextMeshProUGUI delaySec;
     GameObject[] animatables;
     GameObject[] keyFrames;
     public animationPlayer animPlayer;
@@ -24,11 +25,12 @@ public class gameManager : MonoBehaviour
     public Toggle inGameVisToggle;
 
     public Slider speedSlider;
+    public Slider masterTimer;
 
     public bool editMode = true;
     bool isWaiting = false;
-    int waitTime = 120;
-    int countUp = 0;
+    public float waitTime {get; set;}
+    float countUp = 0;
 
     
     
@@ -39,6 +41,7 @@ public class gameManager : MonoBehaviour
         animPlayer = animatables[0].GetComponent<animationPlayer>();
         keyFG.isActive = true;
         speedSlider.onValueChanged.AddListener (delegate {ValueChangeCheck ();});
+        waitTime = 2f;
     }
 
     // UI Elements
@@ -76,6 +79,15 @@ public class gameManager : MonoBehaviour
         animPlayer.pauseToggleVoid();
     }
 
+    public void updateDelayNumber(){
+        delaySec.text = $"{System.Math.Round(waitTime,2)} s";
+    }
+
+    public void setMasterTimer(float totalAnimationTime){
+        masterTimer.value = 0f;
+        masterTimer.maxValue = totalAnimationTime;
+    }
+
     public void resetAll(){
         foreach(GameObject anims in animatables){
             keyFG = anims.GetComponent<keyFrameGenerator>();
@@ -97,6 +109,21 @@ public class gameManager : MonoBehaviour
         }
         inGamePauseToggle.isOn = false;
         animPlayer.pause = false;
+        float longestDistance = 0;
+        foreach(GameObject anims in animatables){
+        keyFG = anims.GetComponent<keyFrameGenerator>();
+        float totalDistance = 0;
+            for(int i = 0; i < keyFG.keyFrameList.Count - 1; i++)
+            {
+                totalDistance += Vector3.Distance(keyFG.keyFrameList[i], keyFG.keyFrameList[i+1]);
+            }
+        if (totalDistance > longestDistance){
+            longestDistance = totalDistance;
+        }
+        }
+        float totalAnimationTime;
+        totalAnimationTime = longestDistance / animPlayer.animSpeed + waitTime;
+        setMasterTimer(totalAnimationTime);
     }
 
     public void checkDone(){
@@ -204,15 +231,16 @@ public class gameManager : MonoBehaviour
              
     void Update(){
         if(isWaiting == true){
+            countUp += Time.deltaTime;
             if(countUp < waitTime){
-                countUp++;
+                Debug.Log($"The waiting timer is at: {countUp * Time.deltaTime}");
             }
-            else if(countUp == waitTime) {
+            else if(countUp >= waitTime) {
                 isWaiting = false;
                 countUp = 0;
                 startAnim();
             } 
         }
-        Debug.Log(countUp);
+        masterTimer.value += 1f* Time.deltaTime;
     }
 }

@@ -56,6 +56,7 @@ public GameObject keyFrameSpawner (){
         }
     Debug.Log(result);   */
     counter ++;
+    lineDrawer();
     return sphere;
                 
  }
@@ -78,6 +79,7 @@ public GameObject sphereSpawn (){
     sphere.tag = "Keyframe";
     sphere.transform.localScale = new Vector3(0.1f,0.1f,0.1f);  //Scale the sphere down by 50%
     sphere.name = ($"{this.gameObject.name} Keyframe {counter}");      //Change its name to keyframe, plus a counter
+
     return sphere;
 }
 
