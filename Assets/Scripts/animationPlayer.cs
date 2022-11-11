@@ -9,11 +9,12 @@ public class animationPlayer : MonoBehaviour
     public XRCustomGrabInteractable XRCustom;
     public GameObject manager;
     public gameManager mng;
-    private int nextFrame = 1;
+    public int nextFrame = 1;
     private bool firstTime = true;
     public float animSpeed;
     public bool isLooping = true;
     public bool pause = false;
+    Vector3 startScale;
 
     // Start is called before the first frame update
     void Start(){
@@ -21,20 +22,26 @@ public class animationPlayer : MonoBehaviour
         keyFG = gameObject.GetComponent<keyFrameGenerator>();
         manager = GameObject.Find("GameManager");
         mng = manager.GetComponent<gameManager>();
+        animSpeed = 5f;
+        startScale = gameObject.transform.localScale;
     }
 
     void Update()
     {
-        animSpeed = mng.animationSpeed;
         if(XRCustom.isGrabbed && pause == false)
         {
             nextFrame = 0;
         }
         if(mng.sniperMode){
             if(keyFG.keyFrameList.Count > 1){
+                gameObject.transform.localScale = new Vector3(0.001f, 0.001f, 0.001f);
                 gameObject.transform.position = keyFG.keyFrameList[0];
                 nextFrame = 1;
             }
+        } 
+        else
+        {
+            gameObject.transform.localScale = startScale;
         }
         if(pause == false){
             if(XRCustom.isGrabbed == false && keyFG.keyFrameList.Count > 1){

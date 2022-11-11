@@ -13,7 +13,7 @@ public class keyFrameGenerator : MonoBehaviour
     public List <Quaternion> keyFrameRotations;
     Rigidbody rigi; 
     public Color keyFrameColor; //Decalres color object which controls the color of the keyframes
-    LineRenderer lineRenderer;
+    public LineRenderer lineRenderer;
     public XRCustomGrabInteractable xrCustom;
     public GameObject manager;
     public gameManager mng;
@@ -26,6 +26,7 @@ public class keyFrameGenerator : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
+        keyFrameSpacing = 0.5f;
         xrCustom = gameObject.GetComponent<XRCustomGrabInteractable>();
         manager = GameObject.Find("GameManager");
         mng = manager.GetComponent<gameManager>();
@@ -114,7 +115,7 @@ public void toggleVisibility(){
     changeVisibility();
 }
 
-void changeVisibility(){
+public void changeVisibility(){
     if (toggleVis == false){
         GameObject[] k = GameObject.FindGameObjectsWithTag ("Keyframe");
         
@@ -123,8 +124,17 @@ void changeVisibility(){
             k[i].GetComponent<MeshRenderer>().enabled = false;
         }
 
-        lineRenderer.startColor = new Color(0f,0f,0f,0f);
-        lineRenderer.endColor = new Color(0f,0f,0f,0f);
+        var lr = FindObjectsOfType<LineRenderer>();
+        foreach (LineRenderer l in lr){
+            if (l.name.Contains("Hand"))
+            {
+                Debug.Log("It's a hand!");
+            }
+            else
+            {
+                l.enabled = false;
+            }
+        }
     }
     else 
     {
@@ -135,15 +145,23 @@ void changeVisibility(){
             k[i].GetComponent<MeshRenderer>().enabled = true;
         }
 
-        lineRenderer.startColor = new Color(255f,255f,255f,0.4f);
-        lineRenderer.endColor = new Color(255f,255f,255f,0.4f);
+        var lr = FindObjectsOfType<LineRenderer>();
+        foreach (LineRenderer l in lr){
+            if (l.name.Contains("Hand"))
+            {
+                Debug.Log("It's a hand!");
+            }
+            else
+            {
+                l.enabled = true;
+            }
+        }
     }
 }
 
 public void animToggleVoid(){
     animToggle = !animToggle;
 }
-
 public void addKeyFrame(){
     if(keyFrameList.Count > 1){
         GameObject sphere = sphereSpawn();
@@ -196,7 +214,6 @@ public void keyFrameSniper(string keyFrameID){
     // Update is called once per frame
     void Update()
     {
-        keyFrameSpacing = mng.KFSpacing;
         if(xrCustom.isGrabbed == true && animToggle == true && mng.sniperMode == false && isActive == true){
             float dist = Vector3.Distance(transform.position, keyFramePosition);    //Calculate the distance between the player and the last sphere
             if (dist > keyFrameSpacing){

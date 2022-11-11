@@ -17,12 +17,13 @@ public class gameManager : MonoBehaviour
     GameObject[] keyFrames;
     public animationPlayer animPlayer;
     public keyFrameGenerator keyFG;
-    public float animationSpeed {get; set;}
-    public float KFSpacing {get; set;}
 
     public Toggle inGameLoopToggle;
     public Toggle inGameAnimToggle;
     public Toggle inGamePauseToggle;
+    public Toggle inGameVisToggle;
+
+    public Slider speedSlider;
 
     
     
@@ -32,9 +33,7 @@ public class gameManager : MonoBehaviour
         keyFG = animatables[0].GetComponent<keyFrameGenerator>();
         animPlayer = animatables[0].GetComponent<animationPlayer>();
         keyFG.isActive = true;
-        animationSpeed = 5f;
-        KFSpacing = 0.5f;
-        objText.text = $"SELECTED:\n" + animatables[0].name;
+        speedSlider.onValueChanged.AddListener (delegate {ValueChangeCheck ();});
     }
 
     // UI Elements
@@ -78,6 +77,34 @@ public class gameManager : MonoBehaviour
         }
     }
 
+    public void pauseAll(){
+        foreach(GameObject anims in animatables){
+            anims.GetComponent<animationPlayer>().pause = true;
+        }
+        inGamePauseToggle.isOn = true;
+        animPlayer.pause = true;
+    }
+
+   /* public void setToStart(){
+        foreach(GameObject anims in animatables){
+            keyFG = anims.GetComponent<keyFrameGenerator>();
+            animPlayer = anims.GetComponent<animationPlayer>();
+            anims.transform.position = keyFG.keyFrameList[0];
+            animPlayer.nextFrame = 1;
+            
+            keyFG = activeAnimatable.GetComponent<keyFrameGenerator>();
+            animPlayer = activeAnimatable.GetComponent<animationPlayer>();
+            
+        }
+    } */
+
+    public void ValueChangeCheck()
+	{
+		animPlayer.animSpeed = speedSlider.value;
+	}
+
+    // Change Active Object
+
     public void changeActive(GameObject newActive){
         foreach(GameObject anims in animatables)
         {
@@ -87,19 +114,27 @@ public class gameManager : MonoBehaviour
                 keyFG = anims.GetComponent<keyFrameGenerator>();
                 animPlayer = anims.GetComponent<animationPlayer>();
                 keyFG.isActive = true;
-                objText.text = $"SELECTED:\n" + anims.name;
+                objText.text = anims.name;
                 anims.GetComponent<Renderer>().material.color = new Color(255f, 0f, 0f);
             }
             else
             {
                 keyFG = anims.GetComponent<keyFrameGenerator>();
                 animPlayer = anims.GetComponent<animationPlayer>();
+
                 keyFG.isActive = false;
                 anims.GetComponent<Renderer>().material.color = Color.grey;
             }
         }
             keyFG = newActive.GetComponent<keyFrameGenerator>();
             animPlayer = newActive.GetComponent<animationPlayer>();
+            sniperMode = false;
+            speedSlider.value = animPlayer.animSpeed;
+
+            inGameVisToggle.isOn = true;
+            keyFG.toggleVis = true;
+            keyFG.changeVisibility();
+
 
             keyFrames = GameObject.FindGameObjectsWithTag("Keyframe");
             
