@@ -25,6 +25,11 @@ public class gameManager : MonoBehaviour
 
     public Slider speedSlider;
 
+    public bool editMode = true;
+    bool isWaiting = false;
+    int waitTime = 120;
+    int countUp = 0;
+
     
     
     void Start(){
@@ -56,6 +61,7 @@ public class gameManager : MonoBehaviour
 
     public void resetAnim(){
         keyFG.resetAnim();
+        editMode = true;
     }
 
     public void animToggleVoid(){
@@ -77,6 +83,35 @@ public class gameManager : MonoBehaviour
         }
     }
 
+    public void startAnim(){
+        editMode = false;
+        foreach(GameObject anims in animatables){
+            keyFG = anims.GetComponent<keyFrameGenerator>();
+            animPlayer = anims.GetComponent<animationPlayer>();
+            if(keyFG.keyFrameList.Count > 1){
+                anims.transform.position = keyFG.keyFrameList[0];
+                animPlayer.nextFrame = 1;
+            }
+            animPlayer.animDone = false;
+            animPlayer.pause = false;
+        }
+        inGamePauseToggle.isOn = false;
+        animPlayer.pause = false;
+    }
+
+    public void checkDone(){
+        bool allDone = true;
+        foreach(GameObject anims in animatables){
+            if(anims.GetComponent<animationPlayer>().animDone == false && anims.GetComponent<keyFrameGenerator>().keyFrameList.Count > 1)
+            {
+                allDone = false;
+            }
+        }
+        if(allDone == true){
+            isWaiting = true;
+        }
+    }
+
     public void pauseAll(){
         foreach(GameObject anims in animatables){
             anims.GetComponent<animationPlayer>().pause = true;
@@ -84,19 +119,6 @@ public class gameManager : MonoBehaviour
         inGamePauseToggle.isOn = true;
         animPlayer.pause = true;
     }
-
-   /* public void setToStart(){
-        foreach(GameObject anims in animatables){
-            keyFG = anims.GetComponent<keyFrameGenerator>();
-            animPlayer = anims.GetComponent<animationPlayer>();
-            anims.transform.position = keyFG.keyFrameList[0];
-            animPlayer.nextFrame = 1;
-            
-            keyFG = activeAnimatable.GetComponent<keyFrameGenerator>();
-            animPlayer = activeAnimatable.GetComponent<animationPlayer>();
-            
-        }
-    } */
 
     public void ValueChangeCheck()
 	{
@@ -181,5 +203,16 @@ public class gameManager : MonoBehaviour
     }
              
     void Update(){
+        if(isWaiting == true){
+            if(countUp < waitTime){
+                countUp++;
+            }
+            else if(countUp == waitTime) {
+                isWaiting = false;
+                countUp = 0;
+                startAnim();
+            } 
+        }
+        Debug.Log(countUp);
     }
 }

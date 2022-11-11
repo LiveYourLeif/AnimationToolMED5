@@ -12,8 +12,9 @@ public class animationPlayer : MonoBehaviour
     public int nextFrame = 1;
     private bool firstTime = true;
     public float animSpeed;
-    public bool isLooping = true;
+    public bool isLooping = false;
     public bool pause = false;
+    public bool animDone = false;
     Vector3 startScale;
 
     // Start is called before the first frame update
@@ -28,9 +29,9 @@ public class animationPlayer : MonoBehaviour
 
     void Update()
     {
-        if(XRCustom.isGrabbed && pause == false)
+        if(XRCustom.isGrabbed)
         {
-            nextFrame = 0;
+           mng.editMode = true;
         }
         if(mng.sniperMode){
             if(keyFG.keyFrameList.Count > 1){
@@ -43,19 +44,20 @@ public class animationPlayer : MonoBehaviour
         {
             gameObject.transform.localScale = startScale;
         }
-        if(pause == false){
-            if(XRCustom.isGrabbed == false && keyFG.keyFrameList.Count > 1){
-                if(firstTime == true){
-                    gameObject.transform.position = keyFG.keyFrameList[0];
+           if(XRCustom.isGrabbed == false && keyFG.keyFrameList.Count > 1){
+               // if(firstTime == true){
+                  //  gameObject.transform.position = keyFG.keyFrameList[0];
                     //if (rotationTrack){
                     //gameObject.transform.rotation = keyFG.keyFrameRotations[0];
                     //}
-                    firstTime = false;
-                }
+                    //firstTime = false;
+                //}
+                if(animDone == false && mng.editMode == false){
                 playAnimation(keyFG.keyFrameList, keyFG.keyFrameRotations);
+                }
             }
-        }
-    }
+    } 
+
     
 
     void playAnimation(List <Vector3> frames, List <Quaternion> rotations){
@@ -66,13 +68,9 @@ public class animationPlayer : MonoBehaviour
 
     if(gameObject.transform.position == frames[nextFrame]){
         if(nextFrame + 1 >= frames.Count){
-            if(isLooping == true){
-            gameObject.transform.position = frames[0];
-                //if(rotationTrack){
-                //gameObject.transform.rotation = rotations[0];
-                //}
-                nextFrame = 1;
-            }
+            animDone = true;
+            Debug.Log($"{gameObject.name} IS DONE");
+            mng.checkDone();
         }
         else {
             nextFrame++;
