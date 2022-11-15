@@ -9,6 +9,7 @@ public class keyFrameGenerator : MonoBehaviour
     public int counter; // Declares varaible that counter the amount of keyframe present in the interface
     public Vector3 keyFramePosition;
     Vector3 startPos;
+    Quaternion startRot;
     public List <Vector3> keyFrameList;
     public List <Quaternion> keyFrameRotations;
     Rigidbody rigi; 
@@ -39,7 +40,8 @@ public class keyFrameGenerator : MonoBehaviour
         lineRenderer.material = new Material(Shader.Find("Sprites/Default"));
         lineRenderer.startColor = new Color(0f,255f,0f,0.0f);
         lineRenderer.endColor = new Color(0f,255f,0f,0.0f);   
-        startPos = gameObject.transform.position;    
+        startPos = gameObject.transform.position;
+        startRot = gameObject.transform.rotation; 
     }
 
 
@@ -110,6 +112,8 @@ public void resetAnim(){
     keyFrameList.Clear();
     counter = 0;
     this.transform.position = startPos;
+    this.transform.rotation = startRot;
+    mng.editMode = true;
 }
 
 public void toggleVisibility(){

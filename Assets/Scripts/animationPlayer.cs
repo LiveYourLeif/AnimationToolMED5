@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class animationPlayer : MonoBehaviour
 {
@@ -16,6 +17,9 @@ public class animationPlayer : MonoBehaviour
     public bool pause = false;
     public bool animDone = false;
     Vector3 startScale;
+
+    public Slider objectSlider;
+    public GameObject sliderScaler;
 
     // Start is called before the first frame update
     void Start(){
@@ -52,13 +56,28 @@ public class animationPlayer : MonoBehaviour
                     //}
                     //firstTime = false;
                 //}
-                if(animDone == false && mng.editMode == false){
+                if(animDone == false && mng.editMode == false && objectSlider.value <= mng.masterTimer.value){
                 playAnimation(keyFG.keyFrameList, keyFG.keyFrameRotations);
                 }
+                sliderScaler.transform.localScale = new Vector3(calcDistance(),1,1);
+
             }
     } 
 
-    
+    float calcDistance(){
+        float totalDistance = 0f;
+        float scaleFactor;
+                for(int i = 0; i < keyFG.keyFrameList.Count - 1; i++)
+                {
+                totalDistance += Vector3.Distance(keyFG.keyFrameList[i], keyFG.keyFrameList[i+1]);
+                }
+        scaleFactor = (totalDistance / animSpeed) / 10f * 100f;
+        Debug.Log($"animation time: {mng.totalAnimationTime}");
+        Debug.Log($"distance: {totalDistance}");
+        Debug.Log($"speed: {animSpeed}");
+        Debug.Log($"scale factor:{scaleFactor}");
+        return scaleFactor;
+    }
 
     void playAnimation(List <Vector3> frames, List <Quaternion> rotations){
     gameObject.transform.position = Vector3.MoveTowards(transform.position, frames[nextFrame], Time.deltaTime * animSpeed);

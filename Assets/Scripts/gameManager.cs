@@ -31,6 +31,8 @@ public class gameManager : MonoBehaviour
     bool isWaiting = false;
     public float waitTime {get; set;}
     float countUp = 0;
+    
+    public float totalAnimationTime = 10f;
 
     
     
@@ -86,6 +88,10 @@ public class gameManager : MonoBehaviour
     public void setMasterTimer(float totalAnimationTime){
         masterTimer.value = 0f;
         masterTimer.maxValue = totalAnimationTime;
+        foreach(GameObject anims in animatables){
+        animPlayer = anims.GetComponent<animationPlayer>();
+        animPlayer.objectSlider.maxValue = totalAnimationTime;
+        }
     }
 
     public void resetAll(){
@@ -117,13 +123,13 @@ public class gameManager : MonoBehaviour
             {
                 totalDistance += Vector3.Distance(keyFG.keyFrameList[i], keyFG.keyFrameList[i+1]);
             }
-        if (totalDistance > longestDistance){
-            longestDistance = totalDistance;
+            if (totalDistance > longestDistance){
+                longestDistance = totalDistance;
+            }
         }
-        }
-        float totalAnimationTime;
         totalAnimationTime = longestDistance / animPlayer.animSpeed + waitTime;
-        setMasterTimer(totalAnimationTime);
+        //setMasterTimer(totalAnimationTime);
+        setMasterTimer(10f);
     }
 
     public void checkDone(){
@@ -233,7 +239,7 @@ public class gameManager : MonoBehaviour
         if(isWaiting == true){
             countUp += Time.deltaTime;
             if(countUp < waitTime){
-                Debug.Log($"The waiting timer is at: {countUp * Time.deltaTime}");
+                //Debug.Log($"The waiting timer is at: {countUp}");
             }
             else if(countUp >= waitTime) {
                 isWaiting = false;
@@ -241,6 +247,11 @@ public class gameManager : MonoBehaviour
                 startAnim();
             } 
         }
+        if(editMode == false){
         masterTimer.value += 1f* Time.deltaTime;
+        }
+        else{
+            masterTimer.value = 0;
+        }
     }
 }
