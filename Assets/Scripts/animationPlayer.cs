@@ -13,9 +13,8 @@ public class animationPlayer : MonoBehaviour
     public int nextFrame = 1;
     private bool firstTime = true;
     public float animSpeed;
-    public bool isLooping = false;
-    public bool pause = false;
     public bool animDone = false;
+    public bool pause = false;
     Vector3 startScale;
 
     public Slider objectSlider;
@@ -56,7 +55,7 @@ public class animationPlayer : MonoBehaviour
                     //}
                     //firstTime = false;
                 //}
-                if(animDone == false && mng.editMode == false && objectSlider.value <= mng.masterTimer.value){
+                if(animDone == false && mng.editMode == false && objectSlider.value <= mng.masterTimer.value && pause == false){
                 playAnimation(keyFG.keyFrameList, keyFG.keyFrameRotations);
                 }
                 sliderScaler.transform.localScale = new Vector3(calcDistance(),1,1);
@@ -96,10 +95,6 @@ public class animationPlayer : MonoBehaviour
         }
     }
     //Debug.Log(gameObject.transform.position);
-    }
-
-    public void loopingToggle(){
-        isLooping = !isLooping;
     }
 
     public void pauseToggleVoid(){

@@ -19,9 +19,7 @@ public class gameManager : MonoBehaviour
     public animationPlayer animPlayer;
     public keyFrameGenerator keyFG;
 
-    public Toggle inGameLoopToggle;
     public Toggle inGameAnimToggle;
-    public Toggle inGamePauseToggle;
     public Toggle inGameVisToggle;
 
     public Slider speedSlider;
@@ -52,14 +50,6 @@ public class gameManager : MonoBehaviour
         sniperMode = !sniperMode;
     }
 
-    public void loopingToggle(){
-        animPlayer.loopingToggle();
-    }
-
-    public void pauseToggleVoid(){
-        animPlayer.pauseToggleVoid();
-    }
-
     public void toggleVisibility(){
         keyFG.toggleVisibility();
     }
@@ -77,9 +67,6 @@ public class gameManager : MonoBehaviour
         keyFG.addKeyFrame();
     }
 
-    public void pauseAnimation(){
-        animPlayer.pauseToggleVoid();
-    }
 
     public void updateDelayNumber(){
         delaySec.text = $"{System.Math.Round(waitTime,2)} s";
@@ -113,7 +100,6 @@ public class gameManager : MonoBehaviour
             animPlayer.animDone = false;
             animPlayer.pause = false;
         }
-        inGamePauseToggle.isOn = false;
         animPlayer.pause = false;
         float longestDistance = 0;
         foreach(GameObject anims in animatables){
@@ -147,10 +133,8 @@ public class gameManager : MonoBehaviour
 
     public void pauseAll(){
         foreach(GameObject anims in animatables){
-            anims.GetComponent<animationPlayer>().pause = true;
+            anims.GetComponent<animationPlayer>().pauseToggleVoid();
         }
-        inGamePauseToggle.isOn = true;
-        animPlayer.pause = true;
     }
 
     public void ValueChangeCheck()
@@ -203,16 +187,6 @@ public class gameManager : MonoBehaviour
                         keyFrames[i].GetComponent<Renderer>().material.color = Color.grey;
                     }
                 }
-                
-                // Looping
-                if (animPlayer.isLooping == false && inGameLoopToggle.isOn == true){
-                    inGameLoopToggle.isOn = false;
-                    animPlayer.isLooping = false;
-                } 
-                else if(animPlayer.isLooping == true && inGameLoopToggle.isOn == false){
-                    inGameLoopToggle.isOn = true;
-                    animPlayer.isLooping = true;
-                }
 
                 // Animate
                 if (keyFG.animToggle == false && inGameAnimToggle.isOn == true){
@@ -222,16 +196,6 @@ public class gameManager : MonoBehaviour
                 else if(keyFG.animToggle == true && inGameAnimToggle.isOn == false){
                     inGameAnimToggle.isOn = true;
                     keyFG.animToggle = true;
-                }
-
-                // Pause
-                if (animPlayer.pause == false && inGamePauseToggle.isOn == true){
-                    inGamePauseToggle.isOn= false;
-                    animPlayer.pause = false;
-                } 
-                else if(animPlayer.pause == true && inGamePauseToggle.isOn== false){
-                    inGamePauseToggle.isOn = true;
-                    animPlayer.pause = true;
                 }
     }
              
@@ -248,7 +212,9 @@ public class gameManager : MonoBehaviour
             } 
         }
         if(editMode == false){
-        masterTimer.value += 1f* Time.deltaTime;
+            if(animPlayer.pause == false){
+            masterTimer.value += 1f* Time.deltaTime;
+            }
         }
         else{
             masterTimer.value = 0;
