@@ -20,6 +20,8 @@ public class animationPlayer : MonoBehaviour
     public Slider objectSlider;
     public GameObject sliderScaler;
 
+    public GameObject timelineCube;
+
     // Start is called before the first frame update
     void Start(){
         XRCustom = gameObject.GetComponent<XRCustomGrabInteractable>();
@@ -70,12 +72,17 @@ public class animationPlayer : MonoBehaviour
                 {
                 totalDistance += Vector3.Distance(keyFG.keyFrameList[i], keyFG.keyFrameList[i+1]);
                 }
-        scaleFactor = (totalDistance / animSpeed) / 10f * 100f;
-        Debug.Log($"animation time: {mng.totalAnimationTime}");
-        Debug.Log($"distance: {totalDistance}");
-        Debug.Log($"speed: {animSpeed}");
-        Debug.Log($"scale factor:{scaleFactor}");
-        return scaleFactor;
+        scaleFactor = (totalDistance / animSpeed) / mng.duration * 100f;
+        if(scaleFactor + objectSlider.value / objectSlider.maxValue * 100 <= 100)
+        {
+            timelineCube.GetComponent<Renderer>().material.color = new Color32 (95,118,255,255);
+            return scaleFactor;
+        }
+        else
+        {
+            timelineCube.GetComponent<Renderer>().material.color = new Color (255,0,0);
+            return 100 - objectSlider.value / objectSlider.maxValue * 100;
+        }
     }
 
     void playAnimation(List <Vector3> frames, List <Quaternion> rotations){
@@ -88,7 +95,7 @@ public class animationPlayer : MonoBehaviour
         if(nextFrame + 1 >= frames.Count){
             animDone = true;
             Debug.Log($"{gameObject.name} IS DONE");
-            mng.checkDone();
+            //mng.checkDone();
         }
         else {
             nextFrame++;

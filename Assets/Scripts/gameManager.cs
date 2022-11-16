@@ -14,6 +14,7 @@ public class gameManager : MonoBehaviour
     public GameObject activeAnimatable;
     public TextMeshProUGUI objText;
     public TextMeshProUGUI delaySec;
+    public TextMeshProUGUI durationText;
     GameObject[] animatables;
     GameObject[] keyFrames;
     public animationPlayer animPlayer;
@@ -28,6 +29,7 @@ public class gameManager : MonoBehaviour
     public bool editMode = true;
     bool isWaiting = false;
     public float waitTime {get; set;}
+    public float duration {get; set;}
     float countUp = 0;
     
     public float totalAnimationTime = 10f;
@@ -42,6 +44,7 @@ public class gameManager : MonoBehaviour
         keyFG.isActive = true;
         speedSlider.onValueChanged.AddListener (delegate {ValueChangeCheck ();});
         waitTime = 2f;
+        duration = 5f;
     }
 
     // UI Elements
@@ -67,6 +70,9 @@ public class gameManager : MonoBehaviour
         keyFG.addKeyFrame();
     }
 
+    public void updateDurationNumber(){
+        durationText.text = $"{duration} s";
+    }
 
     public void updateDelayNumber(){
         delaySec.text = $"{System.Math.Round(waitTime,2)} s";
@@ -74,10 +80,10 @@ public class gameManager : MonoBehaviour
 
     public void setMasterTimer(float totalAnimationTime){
         masterTimer.value = 0f;
-        masterTimer.maxValue = totalAnimationTime;
+        masterTimer.maxValue = duration;
         foreach(GameObject anims in animatables){
-        animPlayer = anims.GetComponent<animationPlayer>();
-        animPlayer.objectSlider.maxValue = totalAnimationTime;
+            animPlayer = anims.GetComponent<animationPlayer>();
+            animPlayer.objectSlider.maxValue = duration;
         }
     }
 
@@ -118,7 +124,7 @@ public class gameManager : MonoBehaviour
         setMasterTimer(10f);
     }
 
-    public void checkDone(){
+    /*public void checkDone(){
         bool allDone = true;
         foreach(GameObject anims in animatables){
             if(anims.GetComponent<animationPlayer>().animDone == false && anims.GetComponent<keyFrameGenerator>().keyFrameList.Count > 1)
@@ -129,7 +135,7 @@ public class gameManager : MonoBehaviour
         if(allDone == true){
             isWaiting = true;
         }
-    }
+    }*/
 
     public void pauseAll(){
         foreach(GameObject anims in animatables){
@@ -218,6 +224,11 @@ public class gameManager : MonoBehaviour
         }
         else{
             masterTimer.value = 0;
+        }
+
+        if(masterTimer.value == masterTimer.maxValue)
+        {
+            isWaiting = true;
         }
     }
 }
