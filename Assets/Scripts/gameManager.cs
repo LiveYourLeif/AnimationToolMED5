@@ -68,6 +68,7 @@ public class gameManager : MonoBehaviour
     public void resetAnim(){
         keyFG.resetAnim();
         editMode = true;
+        animPlayer.sliderScaler.transform.localScale = new Vector3(0,1,1);
     }
 
     public void animToggleVoid(){
@@ -119,8 +120,8 @@ public class gameManager : MonoBehaviour
             keyFG = anims.GetComponent<keyFrameGenerator>();
             animPlayer = anims.GetComponent<animationPlayer>();
             keyFG.resetAnim();
+            animPlayer.sliderScaler.transform.localScale = new Vector3(0,1,1);
         }
-
     }
 
     public void startAnim(){
@@ -153,10 +154,14 @@ public class gameManager : MonoBehaviour
     }*/
 
     public void pauseAll(){
-        foreach(GameObject anims in animatables){
-            anims.GetComponent<animationPlayer>().pauseToggleVoid();
+        if(editMode == true){
+            startAnim();
         }
-        
+        else{
+            foreach(GameObject anims in animatables){
+                anims.GetComponent<animationPlayer>().pauseToggleVoid();
+            }      
+        }
     }
 
     public void ValueChangeCheck()

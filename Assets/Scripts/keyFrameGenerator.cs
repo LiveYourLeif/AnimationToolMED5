@@ -229,7 +229,6 @@ public void keyFrameSniper(string keyFrameID){
         }
 
         if(xrCustom.isGrabbed == true){
-            mng.pauseAll();
             if(isActive == false){
                 mng.changeActive(this.gameObject);
             }

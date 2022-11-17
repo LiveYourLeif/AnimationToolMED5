@@ -49,20 +49,19 @@ public class animationPlayer : MonoBehaviour
         {
             gameObject.transform.localScale = startScale;
         }
-           if(XRCustom.isGrabbed == false && keyFG.keyFrameList.Count > 1){
-               // if(firstTime == true){
+        if(XRCustom.isGrabbed == false && keyFG.keyFrameList.Count > 1){
+           // if(firstTime == true){
                   //  gameObject.transform.position = keyFG.keyFrameList[0];
-                    //if (rotationTrack){
-                    //gameObject.transform.rotation = keyFG.keyFrameRotations[0];
-                    //}
-                    //firstTime = false;
+                //if (rotationTrack){
+                //gameObject.transform.rotation = keyFG.keyFrameRotations[0];
                 //}
-                if(animDone == false && mng.editMode == false && objectSlider.value <= mng.masterTimer.value && pause == false){
-                playAnimation(keyFG.keyFrameList, keyFG.keyFrameRotations);
-                }
-                sliderScaler.transform.localScale = new Vector3(calcDistance(),1,1);
-
+                //firstTime = false;
+            //}
+            if(animDone == false && mng.editMode == false && objectSlider.value <= mng.masterTimer.value && pause == false){
+            playAnimation(keyFG.keyFrameList, keyFG.keyFrameRotations);
             }
+            sliderScaler.transform.localScale = new Vector3(calcDistance(),1,1);
+        }
     } 
 
     float calcDistance(){
