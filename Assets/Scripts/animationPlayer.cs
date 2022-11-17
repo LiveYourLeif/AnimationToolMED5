@@ -40,7 +40,7 @@ public class animationPlayer : MonoBehaviour
         }
         if(mng.sniperMode){
             if(keyFG.keyFrameList.Count > 1){
-                gameObject.transform.localScale = new Vector3(0.001f, 0.001f, 0.001f);
+                gameObject.transform.localScale = new Vector3(0.00001f, 0.00001f, 0.00001f);
                 gameObject.transform.position = keyFG.keyFrameList[0];
                 nextFrame = 1;
             }

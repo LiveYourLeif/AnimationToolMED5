@@ -113,7 +113,6 @@ public void resetAnim(){
     counter = 0;
     this.transform.position = startPos;
     this.transform.rotation = startRot;
-    mng.editMode = true;
 }
 
 public void toggleVisibility(){

@@ -28,6 +28,9 @@ public class gameManager : MonoBehaviour
 
     public TMP_Dropdown dropdown;
 
+    public GameObject timelineMenu;
+    public bool timelineVis = false;
+
     public bool editMode = true;
     bool isWaiting = false;
     public float waitTime {get; set;}
@@ -48,6 +51,8 @@ public class gameManager : MonoBehaviour
         speedSlider.onValueChanged.AddListener (delegate {ValueChangeCheck ();});
         waitTime = 2f;
         duration = 5f;
+        timelineMenu.transform.localScale = new Vector3(0.001f, 0.001f, 0.001f);
+        timelineMenu.SetActive(false);
     }
 
     // UI Elements
@@ -73,6 +78,20 @@ public class gameManager : MonoBehaviour
         keyFG.addKeyFrame();
     }
 
+    public void showTimeline(){
+        timelineVis = !timelineVis;
+        if(timelineVis == true)
+        {
+            timelineMenu.transform.localScale = new Vector3(0.2001019f, 0.1f, 0.1278588f);
+            timelineMenu.SetActive(true);
+        }
+        else
+        {
+            timelineMenu.transform.localScale = new Vector3(0.001f, 0.001f, 0.001f);
+            timelineMenu.SetActive(false);
+        }
+    }
+
     public void updateDurationNumber(){
         durationText.text = $"{duration} s";
     }
@@ -81,7 +100,7 @@ public class gameManager : MonoBehaviour
         delaySec.text = $"{System.Math.Round(waitTime,2)} s";
     }
 
-    public void setMasterTimer(float totalAnimationTime){
+    public void setMasterTimer(){
         masterTimer.value = 0f;
         masterTimer.maxValue = duration;
         foreach(GameObject anims in animatables){
@@ -98,8 +117,10 @@ public class gameManager : MonoBehaviour
     public void resetAll(){
         foreach(GameObject anims in animatables){
             keyFG = anims.GetComponent<keyFrameGenerator>();
+            animPlayer = anims.GetComponent<animationPlayer>();
             keyFG.resetAnim();
         }
+
     }
 
     public void startAnim(){
@@ -115,21 +136,7 @@ public class gameManager : MonoBehaviour
             animPlayer.pause = false;
         }
         animPlayer.pause = false;
-        float longestDistance = 0;
-        foreach(GameObject anims in animatables){
-        keyFG = anims.GetComponent<keyFrameGenerator>();
-        float totalDistance = 0;
-            for(int i = 0; i < keyFG.keyFrameList.Count - 1; i++)
-            {
-                totalDistance += Vector3.Distance(keyFG.keyFrameList[i], keyFG.keyFrameList[i+1]);
-            }
-            if (totalDistance > longestDistance){
-                longestDistance = totalDistance;
-            }
-        }
-        totalAnimationTime = longestDistance / animPlayer.animSpeed + waitTime;
-        //setMasterTimer(totalAnimationTime);
-        setMasterTimer(10f);
+        setMasterTimer();
     }
 
     /*public void checkDone(){
@@ -184,6 +191,13 @@ public class gameManager : MonoBehaviour
             animPlayer = newActive.GetComponent<animationPlayer>();
             sniperMode = false;
             speedSlider.value = animPlayer.animSpeed;
+
+            for(int i = 0; i < animatables.Length; i++)
+            {
+                if(animatables[i] == activeAnimatable){
+                    dropdown.value = i;
+                }
+            }
 
             inGameVisToggle.isOn = true;
             keyFG.toggleVis = true;

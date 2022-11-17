@@ -34,7 +34,7 @@ public class XRCustomGrabInteractable : XRGrabInteractable
             interactorPosition = Vector3.zero;
             interactorRotation = Quaternion.identity;
             isGrabbed = false;
-            if(this.gameObject.GetComponent<keyFrameGenerator>() != null){
+            if(this.gameObject.GetComponent<keyFrameGenerator>() != null && this.gameObject.GetComponent<keyFrameGenerator>().animToggle == true){
                 this.gameObject.GetComponent<keyFrameGenerator>().keyFrameSpawner();
             }
         }
