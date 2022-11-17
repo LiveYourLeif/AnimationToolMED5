@@ -78,6 +78,7 @@ public class animationPlayer : MonoBehaviour
             timelineCube.GetComponent<Renderer>().material.color = new Color32 (95,118,255,255);
             return scaleFactor;
         }
+
         else
         {
             timelineCube.GetComponent<Renderer>().material.color = new Color (255,0,0);

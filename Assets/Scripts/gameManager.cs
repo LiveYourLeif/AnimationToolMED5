@@ -26,6 +26,8 @@ public class gameManager : MonoBehaviour
     public Slider speedSlider;
     public Slider masterTimer;
 
+    public TMP_Dropdown dropdown;
+
     public bool editMode = true;
     bool isWaiting = false;
     public float waitTime {get; set;}
@@ -41,6 +43,7 @@ public class gameManager : MonoBehaviour
         activeAnimatable = animatables[0];
         keyFG = animatables[0].GetComponent<keyFrameGenerator>();
         animPlayer = animatables[0].GetComponent<animationPlayer>();
+        changeActive(animatables[0]);
         keyFG.isActive = true;
         speedSlider.onValueChanged.AddListener (delegate {ValueChangeCheck ();});
         waitTime = 2f;
@@ -85,6 +88,11 @@ public class gameManager : MonoBehaviour
             animPlayer = anims.GetComponent<animationPlayer>();
             animPlayer.objectSlider.maxValue = duration;
         }
+    }
+
+    public void dropdownChange(){
+        GameObject[] objs = GameObject.FindGameObjectsWithTag("Animatable");
+        changeActive(objs[dropdown.value]);
     }
 
     public void resetAll(){
@@ -141,6 +149,7 @@ public class gameManager : MonoBehaviour
         foreach(GameObject anims in animatables){
             anims.GetComponent<animationPlayer>().pauseToggleVoid();
         }
+        
     }
 
     public void ValueChangeCheck()
