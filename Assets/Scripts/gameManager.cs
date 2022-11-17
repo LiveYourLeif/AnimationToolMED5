@@ -66,6 +66,8 @@ public class gameManager : MonoBehaviour
     }
 
     public void resetAnim(){
+        keyFG = activeAnimatable.GetComponent<keyFrameGenerator>();
+        animPlayer = activeAnimatable.GetComponent<animationPlayer>();
         keyFG.resetAnim();
         editMode = true;
         animPlayer.sliderScaler.transform.localScale = new Vector3(0,1,1);
