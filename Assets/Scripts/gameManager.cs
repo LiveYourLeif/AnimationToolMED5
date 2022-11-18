@@ -32,12 +32,14 @@ public class gameManager : MonoBehaviour
     public bool timelineVis = false;
 
     public bool editMode = true;
-    bool isWaiting = false;
+    public bool isWaiting = false;
     public float waitTime {get; set;}
     public float duration {get; set;}
     float countUp = 0;
     
     public float totalAnimationTime = 10f;
+
+    public Vector3 timelineStartPos;
 
     
     
@@ -51,6 +53,7 @@ public class gameManager : MonoBehaviour
         speedSlider.onValueChanged.AddListener (delegate {ValueChangeCheck ();});
         waitTime = 2f;
         duration = 5f;
+        timelineStartPos = timelineMenu.transform.localScale;
         timelineMenu.transform.localScale = new Vector3(0.001f, 0.001f, 0.001f);
         timelineMenu.SetActive(false);
     }
@@ -73,6 +76,16 @@ public class gameManager : MonoBehaviour
         animPlayer.sliderScaler.transform.localScale = new Vector3(0,1,1);
     }
 
+    public void resetAll(){
+        foreach(GameObject anims in animatables){
+            keyFG = anims.GetComponent<keyFrameGenerator>();
+            animPlayer = anims.GetComponent<animationPlayer>();
+            keyFG.resetAnim();
+            editMode = true;
+            animPlayer.sliderScaler.transform.localScale = new Vector3(0,1,1);
+        }
+    }
+
     public void animToggleVoid(){
         keyFG.animToggleVoid();
     }
@@ -85,7 +98,7 @@ public class gameManager : MonoBehaviour
         timelineVis = !timelineVis;
         if(timelineVis == true)
         {
-            timelineMenu.transform.localScale = new Vector3(0.2001019f, 0.1f, 0.1278588f);
+            timelineMenu.transform.localScale = timelineStartPos;
             timelineMenu.SetActive(true);
         }
         else
@@ -96,7 +109,7 @@ public class gameManager : MonoBehaviour
     }
 
     public void updateDurationNumber(){
-        durationText.text = $"{duration} s";
+        durationText.text = $"{System.Math.Round(duration,2)} s";
     }
 
     public void updateDelayNumber(){
@@ -115,15 +128,6 @@ public class gameManager : MonoBehaviour
     public void dropdownChange(){
         GameObject[] objs = GameObject.FindGameObjectsWithTag("Animatable");
         changeActive(objs[dropdown.value]);
-    }
-
-    public void resetAll(){
-        foreach(GameObject anims in animatables){
-            keyFG = anims.GetComponent<keyFrameGenerator>();
-            animPlayer = anims.GetComponent<animationPlayer>();
-            keyFG.resetAnim();
-            animPlayer.sliderScaler.transform.localScale = new Vector3(0,1,1);
-        }
     }
 
     public void startAnim(){

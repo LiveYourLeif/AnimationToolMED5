@@ -57,7 +57,7 @@ public class animationPlayer : MonoBehaviour
                 //}
                 //firstTime = false;
             //}
-            if(animDone == false && mng.editMode == false && objectSlider.value <= mng.masterTimer.value && pause == false){
+            if(animDone == false && mng.editMode == false && objectSlider.value <= mng.masterTimer.value && pause == false && mng.isWaiting == false){
             playAnimation(keyFG.keyFrameList, keyFG.keyFrameRotations);
             }
             sliderScaler.transform.localScale = new Vector3(calcDistance(),1,1);
