@@ -18,6 +18,7 @@ public class keyFrameGenerator : MonoBehaviour
     public XRCustomGrabInteractable xrCustom;
     public GameObject manager;
     public gameManager mng;
+    public GameObject[] existingKFs;
     public bool toggleVis = true;
     public bool animToggle = true;
     public float keyFrameSpacing;
@@ -42,6 +43,19 @@ public class keyFrameGenerator : MonoBehaviour
         lineRenderer.endColor = new Color(0f,255f,0f,0.0f);   
         startPos = gameObject.transform.position;
         startRot = gameObject.transform.rotation; 
+        existingKFs = GameObject.FindGameObjectsWithTag("Keyframe");
+        if(existingKFs != null){
+            for(int i = 0; i < existingKFs.Length; i++){
+                for(int j = 0; j < existingKFs.Length; j++)
+                    if (existingKFs[j].name.Contains($"{this.gameObject.name} Keyframe {i}"))
+                    {
+                        keyFrameList.Add(existingKFs[j].transform.position);
+                        Debug.Log(existingKFs[j]);
+                        continue;
+                    }
+        }
+        lineDrawer();
+        }
     }
 
 

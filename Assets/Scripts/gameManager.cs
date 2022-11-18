@@ -51,6 +51,7 @@ public class gameManager : MonoBehaviour
         changeActive(animatables[0]);
         keyFG.isActive = true;
         speedSlider.onValueChanged.AddListener (delegate {ValueChangeCheck ();});
+        speedSlider.value = 5f;
         waitTime = 2f;
         duration = 5f;
         timelineStartPos = timelineMenu.transform.localScale;
