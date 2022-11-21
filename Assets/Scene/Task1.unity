@@ -3277,7 +3277,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 693586977}
   m_LocalRotation: {x: 0, y: -0.7071068, z: 0, w: 0.7071068}
-  m_LocalPosition: {x: -3.194, y: 2.057, z: 0.05}
+  m_LocalPosition: {x: -3.194, y: 1.512, z: 0.05}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -6348,6 +6348,7 @@ MonoBehaviour:
   xrCustom: {fileID: 0}
   manager: {fileID: 0}
   mng: {fileID: 0}
+  existingKFs: []
   toggleVis: 1
   animToggle: 1
   keyFrameSpacing: 0

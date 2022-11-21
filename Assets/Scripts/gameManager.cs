@@ -1,9 +1,11 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.XR.Interaction.Toolkit;
 using TMPro;
+using UnityEngine.SceneManagement;
 
 public class gameManager : MonoBehaviour
 {
@@ -45,6 +47,10 @@ public class gameManager : MonoBehaviour
     
     void Start(){
         animatables = GameObject.FindGameObjectsWithTag ("Animatable");
+        foreach (GameObject anim in animatables)
+        {
+            Debug.Log(anim);
+        }
         activeAnimatable = animatables[0];
         keyFG = animatables[0].GetComponent<keyFrameGenerator>();
         animPlayer = animatables[0].GetComponent<animationPlayer>();

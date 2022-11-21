@@ -11,7 +11,6 @@ public class animationPlayer : MonoBehaviour
     public GameObject manager;
     public gameManager mng;
     public int nextFrame = 1;
-    private bool firstTime = true;
     public float animSpeed;
     public bool animDone = false;
     public bool pause = false;
