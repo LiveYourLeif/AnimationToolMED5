@@ -47,10 +47,6 @@ public class gameManager : MonoBehaviour
     
     void Start(){
         animatables = GameObject.FindGameObjectsWithTag ("Animatable");
-        foreach (GameObject anim in animatables)
-        {
-            Debug.Log(anim);
-        }
         activeAnimatable = animatables[0];
         keyFG = animatables[0].GetComponent<keyFrameGenerator>();
         animPlayer = animatables[0].GetComponent<animationPlayer>();
@@ -209,13 +205,6 @@ public class gameManager : MonoBehaviour
             animPlayer = newActive.GetComponent<animationPlayer>();
             sniperMode = false;
             speedSlider.value = animPlayer.animSpeed;
-
-            for(int i = 0; i < animatables.Length; i++)
-            {
-                if(animatables[i] == activeAnimatable){
-                    dropdown.value = i;
-                }
-            }
 
             inGameVisToggle.isOn = true;
             keyFG.toggleVis = true;
