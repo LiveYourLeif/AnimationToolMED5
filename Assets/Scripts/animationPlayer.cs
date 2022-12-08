@@ -107,4 +107,3 @@ public class animationPlayer : MonoBehaviour
     pause = !pause;
     }
 }
-//hey virker det her push??
