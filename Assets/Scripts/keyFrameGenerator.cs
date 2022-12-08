@@ -5,26 +5,33 @@ using UnityEngine.XR.Interaction.Toolkit;
 
 public class keyFrameGenerator : MonoBehaviour
 {
+    // This is Tobi's Branch!
     public int counter; // Declares varaible that counter the amount of keyframe present in the interface
     public Vector3 keyFramePosition;
+    Vector3 startPos;
+    Quaternion startRot;
     public List <Vector3> keyFrameList;
     public List <Quaternion> keyFrameRotations;
     Rigidbody rigi; 
     public Color keyFrameColor; //Decalres color object which controls the color of the keyframes
-    LineRenderer lineRenderer;
+    public LineRenderer lineRenderer;
     public XRCustomGrabInteractable xrCustom;
-    public float keyFrameSpacing {get; set;}
+    public GameObject manager;
+    public gameManager mng;
+    public GameObject[] existingKFs;
     public bool toggleVis = true;
     public bool animToggle = true;
-
-    
-    
+    public float keyFrameSpacing;
+    public bool isActive = false;
 
 
     // Start is called before the first frame update
     void Start()
     {
+        keyFrameSpacing = 0.5f;
         xrCustom = gameObject.GetComponent<XRCustomGrabInteractable>();
+        manager = GameObject.Find("GameManager");
+        mng = manager.GetComponent<gameManager>();
         rigi = GetComponent<Rigidbody>();
         keyFrameList = new List<Vector3>();
         keyFramePosition = new Vector3(0,0,0); 
@@ -33,12 +40,22 @@ public class keyFrameGenerator : MonoBehaviour
         lineRenderer = this.gameObject.AddComponent<LineRenderer>(); //spawner en thick line i 0,0,0.. fix det
         lineRenderer.material = new Material(Shader.Find("Sprites/Default"));
         lineRenderer.startColor = new Color(0f,255f,0f,0.0f);
-        lineRenderer.endColor = new Color(0f,255f,0f,0.0f);
-        keyFrameSpacing = 0.5f;
-      
-        
-        
-               
+        lineRenderer.endColor = new Color(0f,255f,0f,0.0f);   
+        startPos = gameObject.transform.position;
+        startRot = gameObject.transform.rotation; 
+        existingKFs = GameObject.FindGameObjectsWithTag("Keyframe");
+        if(existingKFs != null){
+            for(int i = 0; i < existingKFs.Length; i++){
+                for(int j = 0; j < existingKFs.Length; j++)
+                    if (existingKFs[j].name.Contains($"{this.gameObject.name} Keyframe {i}"))
+                    {
+                        keyFrameList.Add(existingKFs[j].transform.position);
+                        Debug.Log(existingKFs[j]);
+                        continue;
+                    }
+        }
+        lineDrawer();
+        }
     }
 
 
@@ -55,6 +72,7 @@ public GameObject keyFrameSpawner (){
         }
     Debug.Log(result);   */
     counter ++;
+    lineDrawer();
     return sphere;
                 
  }
@@ -76,16 +94,17 @@ public GameObject sphereSpawn (){
     sphereGrab.trackRotation = false;
     sphere.tag = "Keyframe";
     sphere.transform.localScale = new Vector3(0.1f,0.1f,0.1f);  //Scale the sphere down by 50%
-    sphere.name = ($"Keyframe {counter}");      //Change its name to keyframe, plus a counter
+    sphere.name = ($"{this.gameObject.name} Keyframe {counter}");      //Change its name to keyframe, plus a counter
+
     return sphere;
 }
 
 void lineDrawer () {
     if (keyFrameList.Count > 1){
-    lineRenderer.startColor = new Color(0f,255f,0f,0.4f);
-    lineRenderer.endColor = new Color(0f,255f,0f,0.4f);
-    lineRenderer.startWidth = 0.01f;
-    lineRenderer.endWidth = 0.01f;
+    lineRenderer.startColor = new Color(255f,255f,255f,0.4f);
+    lineRenderer.endColor = new Color(255f,255f,255f,0.4f);
+    lineRenderer.startWidth = 0.03f;
+    lineRenderer.endWidth = 0.03f;
     lineRenderer.positionCount = keyFrameList.Count;
     lineRenderer.SetPositions(keyFrameList.ToArray());
     }
@@ -94,18 +113,29 @@ void lineDrawer () {
 public void resetAnim(){
 
    GameObject[] k = GameObject.FindGameObjectsWithTag ("Keyframe");
-     
+    
+    lineRenderer.startColor = new Color(0f,0f,0f,0f);
+    lineRenderer.endColor = new Color(0f,0f,0f,0f);
+    
     for(var i = 0 ; i < k.Length ; i ++)
     {
-        Destroy(k[i]);
+        if(k[i].name.Contains(gameObject.name)){
+            Destroy(k[i]);
+        }
     }
     keyFrameList.Clear();
-    //lineRenderer.startColor = new Color(0f,255f,0f,0f);
-    //lineRenderer.endColor = new Color(0f,255f,0f,0f);
+    counter = 0;
+    this.transform.position = startPos;
+    this.transform.rotation = startRot;
 }
 
 public void toggleVisibility(){
-    if (toggleVis == true){
+    toggleVis = !toggleVis;
+    changeVisibility();
+}
+
+public void changeVisibility(){
+    if (toggleVis == false){
         GameObject[] k = GameObject.FindGameObjectsWithTag ("Keyframe");
         
         for(var i = 0 ; i < k.Length ; i ++)
@@ -113,9 +143,17 @@ public void toggleVisibility(){
             k[i].GetComponent<MeshRenderer>().enabled = false;
         }
 
-        lineRenderer.startColor = new Color(0f,255f,0f,0f);
-        lineRenderer.endColor = new Color(0f,255f,0f,0f);
-        toggleVis = false;
+        var lr = FindObjectsOfType<LineRenderer>();
+        foreach (LineRenderer l in lr){
+            if (l.name.Contains("Hand"))
+            {
+                Debug.Log("It's a hand!");
+            }
+            else
+            {
+                l.enabled = false;
+            }
+        }
     }
     else 
     {
@@ -126,17 +164,24 @@ public void toggleVisibility(){
             k[i].GetComponent<MeshRenderer>().enabled = true;
         }
 
-        lineRenderer.startColor = new Color(0f,255f,0f,0.4f);
-        lineRenderer.endColor = new Color(0f,255f,0f,0.4f);
-        toggleVis = true;
+        var lr = FindObjectsOfType<LineRenderer>();
+        foreach (LineRenderer l in lr){
+            if (l.name.Contains("Hand"))
+            {
+                Debug.Log("It's a hand!");
+            }
+            else
+            {
+                l.enabled = true;
+            }
+        }
     }
 }
 
 public void animToggleVoid(){
     animToggle = !animToggle;
 }
-
-public void addKeyFrameLast(){
+public void addKeyFrame(){
     if(keyFrameList.Count > 1){
         GameObject sphere = sphereSpawn();
         int lastPos = keyFrameList.Count - 1;
@@ -156,21 +201,50 @@ public void addKeyFrameLast(){
 }
 
 public void keyFramePositionUpdate(Vector3 position, string keyFrameID){
-    string numberStr = keyFrameID.Replace("Keyframe ", "");
+    string numberStr = keyFrameID.Replace($"{this.gameObject.name} Keyframe ", "");
+    Debug.Log(numberStr);
     int keyFrameNumber = int.Parse(numberStr);
     keyFrameList[keyFrameNumber] = position;
     lineDrawer(); 
 }
 
+public void keyFrameSniper(string keyFrameID){
+    GameObject[] k = GameObject.FindGameObjectsWithTag("Keyframe");
+    List<Object> kfSeperatedList = new List<Object>();
+
+    string numberStr = keyFrameID.Replace($"{this.gameObject.name} Keyframe ", "");
+    int keyFrameNumber = int.Parse(numberStr);
+    keyFrameList.RemoveAt(keyFrameNumber);
+    counter--;
+
+    for (var i = 0; i < k.Length; i++){
+                if(k[i].name.Contains(this.gameObject.name)){
+                    kfSeperatedList.Add(k[i]);
+                }
+             }
+
+    for(var i = 0 ; i < kfSeperatedList.Count ; i++)
+        {
+            kfSeperatedList[i].name = ($"{this.gameObject.name} Keyframe {i}");  
+        }
+    lineDrawer();
+}
+
     // Update is called once per frame
     void Update()
     {
-        if(xrCustom.isGrabbed == true && animToggle == true){
+        if(xrCustom.isGrabbed == true && animToggle == true && mng.sniperMode == false && isActive == true){
             float dist = Vector3.Distance(transform.position, keyFramePosition);    //Calculate the distance between the player and the last sphere
             if (dist > keyFrameSpacing){
                 keyFramePosition = rigi.transform.position;
                 keyFrameSpawner();    
                 lineDrawer();  
+            }
+        }
+
+        if(xrCustom.isGrabbed == true){
+            if(isActive == false){
+                mng.changeActive(this.gameObject);
             }
         }
     }
